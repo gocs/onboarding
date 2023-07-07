@@ -10,27 +10,34 @@
       <a href="/" class="btn btn-ghost text-xl">Onboarding</a>
     </div>
     <div class="navbar-end">
-      <ul class="menu menu-horizontal">
+      <div class="dropdown dropdown-hover">
         {#if $currUser}
-          <li><a href="/">{$currUser.email}</a></li>
-          <li>
-            <form
-              action="/logout"
-              method="POST"
-              use:enhance={() =>
-                async ({ result }) => {
-                  pb.authStore.clear();
-                  await applyAction(result);
-                }}
-            >
-              <button>Log out</button>
-            </form>
-          </li>
+          <a href="/@{$currUser.username}">{$currUser.username}</a>
+          <ul
+            class="dropdown-content z-[1] menu shadow-lg bg-base-100 rounded-box w-52"
+          >
+            <li><a href="/@{$currUser.username}/info">info</a></li>
+            <li>
+              <form
+                action="/logout"
+                method="POST"
+                use:enhance={() =>
+                  async ({ result }) => {
+                    pb.authStore.clear();
+                    await applyAction(result);
+                  }}
+              >
+                <button>log out</button>
+              </form>
+            </li>
+          </ul>
         {:else}
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
+          <ul class="menu menu-horizontal">
+            <li><a href="/login">login</a></li>
+            <li><a href="/register">register</a></li>
+          </ul>
         {/if}
-      </ul>
+      </div>
     </div>
   </div>
 </div>
