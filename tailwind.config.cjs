@@ -9,7 +9,9 @@ const config = {
   theme: {
     extend: {},
   },
-
+  daisyui: {
+    themes: ["light", "dark", "cupcake", "business"],
+  },
   plugins: [forms, typography, daisyui],
 };
 

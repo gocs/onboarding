@@ -26,8 +26,22 @@ export interface Employee {
     user: string
 }
 
+export interface Position {
+    name: string
+    branch: string[]
+}
+
+export interface Department {
+    name: string
+    branch: string[]
+}
+
 export const load = async ({ params }) => {
     const employee: Employee = await pb.collection('employee').getFirstListItem(`user.username='${params.slug}'`)
+
+    const position: Position = await pb.collection('position').getOne(employee.position)
+    const department: any = await pb.collection('department').getOne(employee.department)
+
     const bday = new Date(employee.birthday)
     let month = '' + (bday.getMonth() + 1)
     let day = '' + bday.getDate()
@@ -40,5 +54,5 @@ export const load = async ({ params }) => {
 
     employee.birthday = [year, month, day].join('-');
 
-    return { employee };
+    return { employee, position, department };
 }

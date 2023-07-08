@@ -10,11 +10,16 @@
       <a href="/" class="btn btn-ghost text-xl">Onboarding</a>
     </div>
     <div class="navbar-end">
-      <div class="dropdown dropdown-hover">
+      <div class="dropdown dropdown-hover dropdown-end">
         {#if $currUser}
-          <a href="/@{$currUser.username}">{$currUser.username}</a>
+          <a
+            class="bg-primary px-4 py-1.5 font-semibold"
+            href="/@{$currUser.username}"
+          >
+            @{$currUser.username}
+          </a>
           <ul
-            class="dropdown-content z-[1] menu shadow-lg bg-base-100 rounded-box w-52"
+            class="dropdown-content z-[1] my-1 menu shadow-lg bg-base-100 rounded-box"
           >
             <li><a href="/@{$currUser.username}/info">info</a></li>
             <li>
