@@ -57,5 +57,5 @@ export const load = async ({ params }) => {
 
     employee.birthday = [year, month, day].join('-');
 
-    return { employee, position, department };
+    return { params, pb, employee, position, department };
 }
