@@ -218,12 +218,17 @@
             <div class="form-control">
                 <label class="input-group input-group-vertical">
                     <span class="py-1">Position</span>
-                    <input
-                        bind:value={data.position.name}
-                        type="text"
-                        placeholder="position.."
-                        class="input input-bordered"
-                    />
+                    <select
+                        bind:value={data.employee.position}
+                        class="select select-bordered"
+                    >
+                        <option selected disabled>position..</option>
+                        {#each data.position as position}
+                            <option value={position.id}>
+                                {position.name}
+                            </option>
+                        {/each}
+                    </select>
                 </label>
             </div>
         </div>
@@ -231,12 +236,17 @@
             <div class="form-control">
                 <label class="input-group input-group-vertical">
                     <span class="py-1">Department</span>
-                    <input
-                        bind:value={data.department.name}
-                        type="text"
-                        placeholder="department.."
-                        class="input input-bordered"
-                    />
+                    <select
+                        bind:value={data.employee.department}
+                        class="select select-bordered"
+                    >
+                        <option selected disabled>department..</option>
+                        {#each data.department as department}
+                            <option value={department.id}>
+                                {department.name}
+                            </option>
+                        {/each}
+                    </select>
                 </label>
             </div>
         </div>
