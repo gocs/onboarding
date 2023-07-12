@@ -7,7 +7,7 @@ declare global {
 			pb: import('pocketbase').default
 			user: import('pocketbase').default['authStore']['model']
 		}
-		// interface PageData {}
+		interface PageData {}
 		// interface Platform {}
 	}
 }

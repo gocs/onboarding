@@ -5,7 +5,7 @@
 
 <form
     method="POST"
-    class="card"
+    class="card py-8 px-4"
     use:enhance={() =>
         async ({ result }) => {
             pb.authStore.loadFromCookie(document.cookie);

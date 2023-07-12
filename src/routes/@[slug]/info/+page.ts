@@ -1,6 +1,8 @@
 import { pb } from '$lib/pocketbase/db.js';
+import { error } from '@sveltejs/kit';
+import type { Record } from 'pocketbase';
 
-export interface Employee {
+export interface Employee extends Record {
     birthday: string
     branch: string[]
     city: string
@@ -26,19 +28,21 @@ export interface Employee {
     user: string
 }
 
-export interface Position {
+export interface Position extends Record {
     id: string
     name: string
     branch: string[]
 }
 
-export interface Department {
+export interface Department extends Record {
     id: string
     name: string
     branch: string[]
 }
 
 export const load = async ({ params }) => {
+    if (!pb.authStore.isValid) throw error(401, "Unauthorized");
+
     const employee: Employee = await pb.collection('employee').getFirstListItem(`user.username='${params.slug}'`)
 
     const position: Position[] = await pb.collection('position').getFullList({ sort: '-created', })
