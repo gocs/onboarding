@@ -7,6 +7,7 @@
 
   let element: HTMLDivElement;
   let editor: Editor;
+  export let value: string;
 
   onMount(() => {
     editor = new Editor({
@@ -45,155 +46,127 @@
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
         editor = editor;
+        value = element?.getElementsByClassName("ProseMirror")[0].innerHTML
       },
     });
   });
 </script>
 
 {#if editor}
-  <div class="flex flex-wrap gap-2 p-2">
+  <div class="flex flex-wrap gap-2 p-2 editor-btns">
     <button
-      on:click={() => console.log && editor.chain().focus().toggleBold().run()}
+      on:click={() => editor.chain().focus().toggleBold().run()}
       disabled={!editor.can().chain().focus().toggleBold().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("bold") ? " is-active" : "")}
+      class={editor.isActive("bold") ? "is-active" : ""}
     >
       bold
     </button>
     <button
       on:click={() => editor.chain().focus().toggleItalic().run()}
       disabled={!editor.can().chain().focus().toggleItalic().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("italic") ? "is-active" : "")}
+      class={editor.isActive("italic") ? "is-active" : ""}
     >
       italic
     </button>
     <button
       on:click={() => editor.chain().focus().toggleStrike().run()}
       disabled={!editor.can().chain().focus().toggleStrike().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("strike") ? "is-active" : "")}
+      class={editor.isActive("strike") ? "is-active" : ""}
     >
       strike
     </button>
     <button
       on:click={() => editor.chain().focus().toggleCode().run()}
       disabled={!editor.can().chain().focus().toggleCode().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("code") ? "is-active" : "")}
+      class={editor.isActive("code") ? "is-active" : ""}
     >
       code
     </button>
-    <button
-      class="border rounded-md px-1"
-      on:click={() => editor.chain().focus().unsetAllMarks().run()}
-    >
+    <button on:click={() => editor.chain().focus().unsetAllMarks().run()}>
       clear marks
     </button>
-    <button
-      class="border rounded-md px-1"
-      on:click={() => editor.chain().focus().clearNodes().run()}
-    >
+    <button on:click={() => editor.chain().focus().clearNodes().run()}>
       clear nodes
     </button>
     <button
       on:click={() => editor.chain().focus().setParagraph().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("paragraph") ? "is-active" : "")}
+      class={editor.isActive("paragraph") ? "is-active" : ""}
     >
       paragraph
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 1 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
     >
       h1
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 2 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
     >
       h2
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 3 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
     >
       h3
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 4 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
     >
       h4
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 5 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
     >
       h5
     </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("heading", { level: 6 }) ? "is-active" : "")}
+      class={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
     >
       h6
     </button>
     <button
       on:click={() => editor.chain().focus().toggleBulletList().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("bulletList") ? "is-active" : "")}
+      class={editor.isActive("bulletList") ? "is-active" : ""}
     >
       bullet list
     </button>
     <button
       on:click={() => editor.chain().focus().toggleOrderedList().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("orderedList") ? "is-active" : "")}
+      class={editor.isActive("orderedList") ? "is-active" : ""}
     >
       ordered list
     </button>
     <button
       on:click={() => editor.chain().focus().toggleCodeBlock().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("codeBlock") ? "is-active" : "")}
+      class={editor.isActive("codeBlock") ? "is-active" : ""}
     >
       code block
     </button>
     <button
       on:click={() => editor.chain().focus().toggleBlockquote().run()}
-      class={"border rounded-md px-1" +
-        (editor.isActive("blockquote") ? "is-active" : "")}
+      class={editor.isActive("blockquote") ? "is-active" : ""}
     >
       blockquote
     </button>
-    <button
-      class="border rounded-md px-1"
-      on:click={() => editor.chain().focus().setHorizontalRule().run()}
-    >
+    <button on:click={() => editor.chain().focus().setHorizontalRule().run()}>
       horizontal rule
     </button>
-    <button
-      class="border rounded-md px-1"
-      on:click={() => editor.chain().focus().setHardBreak().run()}
-    >
+    <button on:click={() => editor.chain().focus().setHardBreak().run()}>
       hard break
     </button>
     <button
-      class="border rounded-md px-1"
       on:click={() => editor.chain().focus().undo().run()}
       disabled={!editor.can().chain().focus().undo().run()}
     >
       undo
     </button>
     <button
-      class="border rounded-md px-1"
       on:click={() => editor.chain().focus().redo().run()}
       disabled={!editor.can().chain().focus().redo().run()}
     >
@@ -201,4 +174,10 @@
     </button>
   </div>
 {/if}
-<div class="" bind:this={element} />
+<div bind:this={element} />
+
+<style>
+  .editor-btns > button {
+    @apply border rounded-md px-1;
+  }
+</style>
