@@ -2,14 +2,20 @@ import { redirect, type Actions } from "@sveltejs/kit";
 
 export const actions: Actions = {
     default: async ({ locals, request, params }) => {
-        const data = Object.fromEntries(await request.formData())
+        const data = Object.fromEntries(await request.formData()) as {
+            content: string
+            attachments: any
+            poster: any
+        }
 
-        // try {
-        //     await locals.pb.collection('users').authWithPassword(data.email, data.password)
-        // } catch (e) {
-        //     console.error("register:", e);
-        //     throw e
-        // }
+        data["poster"] = locals.user?.id
+
+        try {
+            const record = await locals.pb.collection('post').create(data);
+        } catch (e) {
+            console.error("post:", e);
+            throw e
+        }
 
         throw redirect(303, '/@' + params.slug)
     }
