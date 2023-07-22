@@ -3,37 +3,36 @@
     import { pb } from "$lib/pocketbase/db.js";
     import { error } from "@sveltejs/kit";
     import type { PageData } from "./$types.js";
+    import Tiptap from "$lib/component/Tiptap.svelte";
 
     export let data: PageData;
+    let value = "";
     // if (!$currUser) throw error(401, "Unauthorized");
     // if ($currUser.username !== data.username) throw error(401, "Unauthorized");
 </script>
 
 <form
     method="POST"
-    class="flex flex-col mt-5 mx-4 shadow-xl"
+    class="flex flex-col mt-5 mx-4 shadow-md border border-gray-700/80 rounded-md"
     use:enhance={() =>
         async ({ result }) => {
             if (!pb.authStore.isValid) throw error(401, "Unauthorized");
             await applyAction(result);
         }}
 >
-    <div class="flex join">
-        <textarea
-            name="content"
-            class="textarea textarea-bordered w-full rounded-b-none border-b-0"
-            placeholder="share your thoughts.."
-        />
+    <div class="flex flex-col join border-t-gray-100 border-gray-950">
+        <input type="hidden" name="content" bind:value required />
+        <Tiptap bind:value />
     </div>
     <div class="flex flex-col">
         <div class="join">
             <input
                 type="file"
                 multiple
-                name="attacments"
-                class="file-input file-input-bordered join-item w-full rounded-t-none"
+                name="attachments"
+                class="file-input join-item w-full rounded-t-none"
             />
-            <button class="btn btn-bordered join-item rounded-t-none"
+            <button class="btn join-item rounded-t-none"
                 >Send</button
             >
         </div>
