@@ -4,27 +4,66 @@
     import { error } from "@sveltejs/kit";
     import type { PageData } from "./$types.js";
     import Tiptap from "$lib/component/Tiptap.svelte";
+    import { browser } from "$app/environment";
 
     export let data: PageData;
     let value = "";
+
+    $: console.log("value 2:", value);
+    
     // if (!$currUser) throw error(401, "Unauthorized");
     // if ($currUser.username !== data.username) throw error(401, "Unauthorized");
+    let lang = "en-US";
+    if (browser) lang = window.navigator.language;
+
+    const MINUTE_MILLISECONDS = 1000 * 60;
+    const HOUR_MILLISECONDS = MINUTE_MILLISECONDS * 60;
+    const DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
+
+    function toRelativeTime(date: string): string {
+        const rtf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+
+        const creation = new Date(date).getTime();
+        const now = new Date().getTime();
+
+        let daysDifference = Math.round((creation - now) / DAY_MILLISECONDS);
+        let unit = "day";
+        if (!daysDifference) {
+            daysDifference = Math.round((creation - now) / HOUR_MILLISECONDS);
+            unit = "hour";
+        }
+        if (!daysDifference) {
+            daysDifference = Math.round((creation - now) / MINUTE_MILLISECONDS);
+            unit = "minute";
+        }
+        return rtf.format(daysDifference, unit);
+    }
+
+    function toAutoLocalDate(date: string): string {
+        return Intl.DateTimeFormat(lang, {
+            timeStyle: "medium",
+            dateStyle: "medium",
+        }).format(new Date(date));
+    }
 </script>
 
-<form
-    method="POST"
+<div
     class="flex flex-col mt-5 mx-4 shadow-md border border-gray-700/80 rounded-md"
-    use:enhance={() =>
-        async ({ result }) => {
-            if (!pb.authStore.isValid) throw error(401, "Unauthorized");
-            await applyAction(result);
-        }}
 >
     <div class="flex flex-col join border-t-gray-100 border-gray-950">
-        <input type="hidden" name="content" bind:value required />
         <Tiptap bind:value />
     </div>
-    <div class="flex flex-col">
+    <form
+        method="POST"
+        class="flex flex-col"
+        use:enhance={() =>
+            async ({ result }) => {
+                if (!pb.authStore.isValid) throw error(401, "Unauthorized");
+                value = "";
+                await applyAction(result);
+            }}
+    >
+        <input type="hidden" name="content" bind:value required />
         <div class="join">
             <input
                 type="file"
@@ -32,12 +71,10 @@
                 name="attachments"
                 class="file-input join-item w-full rounded-t-none"
             />
-            <button class="btn join-item rounded-t-none"
-                >Send</button
-            >
+            <button class="btn join-item rounded-t-none">Send</button>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 <div class="divider px-4" />
 
@@ -48,9 +85,20 @@
         >
             <div class="card-body">
                 <h2 class="card-title">
-                    <a class="link link-accent" href="/@{data.user.username}">
-                        @{data.user.username}
-                    </a>
+                    <div class="stat p-0">
+                        <a
+                            class="link link-accent"
+                            href="/@{post.expand.poster.username}"
+                        >
+                            @{post.expand.poster.username}
+                        </a>
+                        <div
+                            class="stat-desc"
+                            title={toAutoLocalDate(post.updated)}
+                        >
+                            {toRelativeTime(post.updated)}
+                        </div>
+                    </div>
                 </h2>
                 <p>{@html post.content}</p>
             </div>

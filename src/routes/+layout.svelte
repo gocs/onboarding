@@ -17,15 +17,13 @@
       <div class="navbar-end">
         <div class="dropdown dropdown-hover dropdown-end">
           {#if $currUser}
-            <a
-              class="bg-primary px-4 py-1.5 font-semibold rounded-md"
-              href="/@{$currUser.username}"
-            >
+            <label tabindex="0" class="bg-primary px-4 py-1.5 font-semibold rounded-md cursor-pointer">
               @{$currUser.username}
-            </a>
+            </label>
             <ul
               class="dropdown-content z-[1] my-1 menu shadow-lg bg-base-100 rounded-box"
             >
+              <li><a href="/@{$currUser.username}">posts</a></li>
               <li><a href="/@{$currUser.username}/info">info</a></li>
               <li>
                 <form

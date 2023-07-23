@@ -20,6 +20,12 @@
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
         editor = editor;
+        if (
+          element
+            ?.getElementsByClassName("ProseMirror")[0]
+            .children[0].classList.contains("is-empty")
+        )
+          return;
         value = element?.getElementsByClassName("ProseMirror")[0].innerHTML;
       },
     });
@@ -151,6 +157,10 @@
 <div bind:this={element} />
 
 <style>
+  
+  .editor-btns > button.is-active {
+    @apply border-gray-300/80 rounded-none;
+  }
   .editor-btns > button {
     @apply border border-slate-700/80 shadow-md rounded-md px-1;
   }
